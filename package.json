@@ -1,0 +1,30 @@
+{
+  "name": "gobang-ai-js",
+  "version": "1.0.0",
+  "description": "A Gobang AI implementation based on Alpha-Beta pruning algorithm.",
+  "homepage": "https://smallmain.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smallmain/gobang-ai.js"
+  },
+  "bugs": {
+    "url": "https://github.com/smallmain/gobang-ai.js/issues"
+  },
+  "author": {
+    "name": "SmallMain",
+    "email": "smallmain@outlook.com",
+    "url": "https://www.smallmain.com/"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "prettier": "3.0.3",
+    "@xenon.js/ts-config": "^1.0.6",
+    "@xenon.js/prettier-config": "^1.0.4"
+  }
+}
