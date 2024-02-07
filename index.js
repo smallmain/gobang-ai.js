@@ -39,11 +39,9 @@ function generateHistory(data) {
         const subData = data[i];
         for (let j = 0; j < subData.length; j++) {
             const role = subData[j];
-            if (role === internal.Role.Black) {
-                // @ts-expect-error
+            if (role === Role.Black) {
                 blackHistory.push({ i, j, role });
-            } else if (role === internal.Role.White) {
-                // @ts-expect-error
+            } else if (role === Role.White) {
                 whiteHistory.push({ i, j, role });
             }
         }
