@@ -1,6 +1,6 @@
 {
   "name": "gobang-ai-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Gobang AI implementation based on Alpha-Beta pruning algorithm.",
   "homepage": "https://smallmain.com/",
   "repository": {
