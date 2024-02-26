@@ -7,6 +7,7 @@ declare namespace _default {
     export { position };
     export { shape };
     export { ZobristCache };
+    export { caches };
 }
 export default _default;
 /**
@@ -97,3 +98,4 @@ declare const Evaluate: any;
 declare const position: any;
 declare const shape: any;
 declare const ZobristCache: any;
+declare const caches: any;

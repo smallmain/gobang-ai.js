@@ -2,10 +2,6 @@ export default class Cache {
     constructor(capacity?: number);
     capacity: number;
     /**
-     * @type {[number,number][]}
-     */
-    cache: [number, number][];
-    /**
      * @type {Map<number, Map<number, any>>}
      */
     map: Map<number, Map<number, any>>;
@@ -24,4 +20,12 @@ export default class Cache {
      * @param {[number,number]} key
      */
     has(key: [number, number]): boolean;
+    /**
+     * @returns {string} JSON 字符串
+     */
+    serialize(): string;
+    /**
+     * @param {string} jsonStr
+     */
+    deserialize(jsonStr: string): void;
 }

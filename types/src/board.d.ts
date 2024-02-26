@@ -10,10 +10,6 @@ declare class Board {
     role: number;
     history: any[];
     zobrist: import("./zobrist-32bit.js").default | import("./zobrist-bigint.js").default;
-    winnerCache: import("./cache-bigint.js").default;
-    gameoverCache: import("./cache-bigint.js").default;
-    evaluateCache: import("./cache-bigint.js").default;
-    valuableMovesCache: import("./cache-bigint.js").default;
     evaluateTime: number;
     evaluator: Evaluate;
     isGameOver(): any;
@@ -25,7 +21,10 @@ declare class Board {
     coordinate2position(coordinate: any): any;
     getValuableMoves(role: any, depth?: number, onlyThree?: boolean, onlyFour?: boolean): any;
     display(extraPoints?: any[]): string;
-    hash(): bigint | [number, number];
+    /**
+     * @returns {any}
+     */
+    hash(): any;
     evaluate(role: any): any;
     reverse(): Board;
     toString(): string;

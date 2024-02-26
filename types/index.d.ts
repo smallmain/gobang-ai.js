@@ -5,6 +5,8 @@ declare namespace _default {
     export { evaluate };
     export { types };
     export { config };
+    export { serializeCache };
+    export { deserializeCache };
 }
 export default _default;
 import internal, * as types from './src/index.js';
@@ -111,3 +113,15 @@ declare const config: {
     inlineCount: number;
     inLineDistance: number;
 };
+/**
+ * @type {()=>string}
+ *
+ * 序列化计算缓存
+ */
+declare const serializeCache: () => string;
+/**
+ * @type {(jsonStr: string|object)=>void}
+ *
+ * 应用传入的计算缓存
+ */
+declare const deserializeCache: (jsonStr: string | object) => void;
