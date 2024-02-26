@@ -16,6 +16,8 @@
 - 封装便捷接口，添加了所有公开接口的注释
 - 对 TypeScript 友好，添加了类型提示文件
 - 重新实现了 Zobrist Cache，使其能运行在无 `BigInt` 特性的 JavaScript 环境
+- 修复原项目缓存失效的问题
+- 支持序列化/反序列化算法缓存
 
 > 该项目仅私人使用，未经过严格测试，不建议用于非常正式的生产环境。
 
@@ -116,6 +118,22 @@ const json = JSON.stringify(game.save());
 
 const data = JSON.parse(json);
 game.load(data.size, data.history);
+```
+
+### 缓存序列化
+
+AI 使用了 Zobrist Cache 以减少重复的计算，这个缓存可以被序列化保存然后在低端设备上加载，达到以空间换时间的目的，使低端机也有相对流畅的体验。
+
+将缓存序列化为 JSON 字符串：
+
+```ts
+const text = ai.serializeCache();
+```
+
+从 JSON 对象或者字符串应用缓存：
+
+```ts
+ai.deserializeCache(text);
 ```
 
 ### 私有接口

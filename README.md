@@ -15,6 +15,8 @@ The original project is a React web page, this project has made the following ch
 - Encapsulate convenient interfaces and add comments for all public interfaces
 - Friendly to TypeScript, added type hint files
 - Reimplemented Zobrist Cache so that it can run in JavaScript environment without `BigInt` feature
+- Fixed the problem of original project cache failure
+- Supports serialization/deserialization algorithm caching
 
 > This project is for private use only, has not been rigorously tested, and is not recommended for use in very formal production environments.
 
@@ -114,6 +116,22 @@ const json = JSON.stringify(game.save());
 
 const data = JSON.parse(json);
 game.load(data.size, data.history);
+```
+
+### Cache serialization
+
+AI uses Zobrist Cache to reduce repeated calculations. This cache can be serialized and saved and then loaded on low-end devices to achieve the purpose of exchanging space for time, so that low-end machines can also have a relatively smooth experience.
+
+Serialize cache to JSON string:
+
+```ts
+const text = ai.serializeCache();
+```
+
+Apply caching from a JSON object or string:
+
+```ts
+ai.deserializeCache(text);
 ```
 
 ### Private interface
