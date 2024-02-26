@@ -1,5 +1,6 @@
 import Board from './board.js';
 import Cache from './cache.js';
+import * as caches from "./caches.js";
 import { config } from './config.js';
 import Evaluate from './eval.js';
 import { minmax } from './minmax.js';
@@ -64,4 +65,4 @@ import ZobristCache from './zobrist.js';
  * @property {EvaluateResult} result 计算结果
  */
 
-export default { Board, minmax, Cache, config, Evaluate, position, shape, ZobristCache };
+export default { Board, minmax, Cache, config, Evaluate, position, shape, ZobristCache, caches };

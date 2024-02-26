@@ -8,6 +8,20 @@ import internal, * as types from './src/index.js';
 const config = internal.config;
 
 /**
+ * @type {()=>string}
+ *
+ * 序列化计算缓存
+ */
+const serializeCache = internal.caches.serialize;
+
+/**
+ * @type {(jsonStr: string|object)=>void}
+ *
+ * 应用传入的计算缓存
+ */
+const deserializeCache = internal.caches.deserialize;
+
+/**
  * @type {{Black: 1, White: -1, None: 0}}
  *
  * 角色枚举
@@ -245,4 +259,4 @@ function evaluate(size, depth, data) {
     }
 }
 
-export default { internal, Role, Game, evaluate, types, config };
+export default { internal, Role, Game, evaluate, types, config, serializeCache, deserializeCache };

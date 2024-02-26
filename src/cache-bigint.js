@@ -1,9 +1,9 @@
+import { arr32bitToBigint, bigintTo32bitArr } from './bigint-32bit-converter.js';
 import { config } from './config.js';
 // 先入先出缓存
 export default class Cache {
-    constructor(capacity = 1000000) {
+    constructor(capacity = 10000000) {
         this.capacity = capacity;
-        this.cache = [];
         this.map = new Map();
     }
 
@@ -19,13 +19,18 @@ export default class Cache {
     // 设置或插入一个值
     put(key, value) {
         if (!config.enableCache) return false;
-        if (this.cache.length >= this.capacity) {
-            const oldestKey = this.cache.shift();  // 移除最老的键
-            this.map.delete(oldestKey);  // 从map中也删除它
-        }
-
-        if (!this.map.has(key)) {
-            this.cache.push(key);  // 将新键添加到cache数组
+        if (this.map.size >= this.capacity) {
+            console.warn("cache is full, this may affect the speed of gobang ai.");
+            // 随机移除一部分键
+            let count = Math.ceil(this.capacity * 0.0001);
+            while (count > 0 && this.map.size !== 0) {
+                for (const key of this.map.keys()) {
+                    if (Math.random() >= 0.5) {
+                        this.map.delete(key);
+                        count--;
+                    }
+                }
+            }
         }
         this.map.set(key, value);  // 更新或设置键值
     }
@@ -34,5 +39,26 @@ export default class Cache {
     has(key) {
         if (!config.enableCache) return false;
         return this.map.has(key);
+    }
+
+    /**
+     * @returns {string} JSON 字符串
+     */
+    serialize() {
+        const arr = [];
+        for (const [key, value] of this.map) {
+            arr.push([bigintTo32bitArr(key), value]);
+        }
+        return JSON.stringify(arr);
+    }
+
+    /**
+     * @param {string} jsonStr
+     */
+    deserialize(jsonStr) {
+        const arr = JSON.parse(jsonStr);
+        for (const [key, value] of arr) {
+            this.map.set(arr32bitToBigint(key), value);
+        }
     }
 }

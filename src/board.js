@@ -1,6 +1,6 @@
-import Cache from './cache.js';
 import Zobrist from './zobrist.js';
 // import { evaluate } from './evaluate';
+import { evaluateCache, gameoverCache, valuableMovesCache, winnerCache } from './caches.js';
 import Evaluate, { FIVE } from './eval.js';
 
 class Board {
@@ -14,40 +14,36 @@ class Board {
         this.role = firstRole;  // 1 for black, -1 for white
         this.history = [];
         this.zobrist = new Zobrist(this.size);
-        this.winnerCache = new Cache();
-        this.gameoverCache = new Cache();
-        this.evaluateCache = new Cache();
-        this.valuableMovesCache = new Cache();
         this.evaluateTime = 0;
         this.evaluator = new Evaluate(this.size);
     }
 
     isGameOver() {
         const hash = this.hash();
-        if (this.gameoverCache.get(hash)) {
-            return this.gameoverCache.get(hash);
+        if (gameoverCache.get(hash)) {
+            return gameoverCache.get(hash);
         }
         if (this.getWinner() !== 0) {
-            this.gameoverCache.put(hash, true);
+            gameoverCache.put(hash, true);
             return true;  // Someone has won
         }
         // Game is over when there is no empty space on the board or someone has won
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
                 if (this.board[i][j] === 0) {
-                    this.gameoverCache.put(hash, false);
+                    gameoverCache.put(hash, false);
                     return false;
                 }
             }
         }
-        this.gameoverCache.put(hash, true);
+        gameoverCache.put(hash, true);
         return true;
     }
 
     getWinner() {
         const hash = this.hash();
-        if (this.winnerCache.get(hash)) {
-            return this.winnerCache.get(hash);
+        if (winnerCache.get(hash)) {
+            return winnerCache.get(hash);
         }
         let directions = [[1, 0], [0, 1], [1, 1], [1, -1]];  // Horizontal, Vertical, Diagonal
         for (let i = 0; i < this.size; i++) {
@@ -65,13 +61,13 @@ class Board {
                         count++;
                     }
                     if (count >= 5) {
-                        this.winnerCache.put(hash, this.board[i][j]);
+                        winnerCache.put(hash, this.board[i][j]);
                         return this.board[i][j];
                     }
                 }
             }
         }
-        this.winnerCache.put(hash, 0);
+        winnerCache.put(hash, 0);
         return 0;
     }
 
@@ -134,7 +130,7 @@ class Board {
 
     getValuableMoves(role, depth = 0, onlyThree = false, onlyFour = false) {
         const hash = this.hash();
-        const prev = this.valuableMovesCache.get(hash);
+        const prev = valuableMovesCache.get(hash);
         if (prev) {
             if (prev.role === role && prev.depth === depth && prev.onlyThree === onlyThree && prev.onlyFour === onlyFour) {
                 return prev.moves;
@@ -146,7 +142,7 @@ class Board {
             const center = Math.floor(this.size / 2);
             if (this.board[center][center] == 0) moves.push([center, center]);
         }
-        this.valuableMovesCache.put(hash, {
+        valuableMovesCache.put(hash, {
             role,
             moves,
             depth,
@@ -184,6 +180,9 @@ class Board {
         return result;
     }
 
+    /**
+     * @returns {any}
+     */
     hash() {
         return this.zobrist.getHash();
     }
@@ -191,7 +190,7 @@ class Board {
     //evaluate(role) {
     //  const start = + new Date();
     //  const hash = this.hash();
-    //  const prev = this.evaluateCache.get(hash);
+    //  const prev = evaluateCache.get(hash);
     //  if (prev) {
     //    if (prev.role === role) {
     //      return prev.value;
@@ -199,13 +198,13 @@ class Board {
     //  }
     //  const value = evaluate(this.board, role);
     //  this.evaluateTime += +new Date - start;
-    //  this.evaluateCache.put(hash, { role, value });
+    //  evaluateCache.put(hash, { role, value });
     //  return value;
     //}
 
     evaluate(role) {
         const hash = this.hash();
-        const prev = this.evaluateCache.get(hash);
+        const prev = evaluateCache.get(hash);
         if (prev) {
             if (prev.role === role) {
                 return prev.score;
@@ -218,7 +217,7 @@ class Board {
         } else {
             score = this.evaluator.evaluate(role);
         }
-        this.evaluateCache.put(hash, { role, score });
+        evaluateCache.put(hash, { role, score });
         return score;
     }
     reverse() {

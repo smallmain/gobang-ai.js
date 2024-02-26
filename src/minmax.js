@@ -1,4 +1,4 @@
-import Cache from "./cache.js";
+import { minmaxCache } from "./caches.js";
 import { FIVE } from "./eval.js";
 
 const MAX = 1000000000;
@@ -10,7 +10,6 @@ export const cache_hits = {
 };
 
 const onlyThreeThreshold = 6;
-const cache = new Cache(); // 放在这里，则minmax, vct和vcf会共用同一个缓存
 
 const factory = (onlyThree = false, onlyFour = false) => {
     // depth 表示总深度，cDepth表示当前搜索深度
@@ -20,7 +19,7 @@ const factory = (onlyThree = false, onlyFour = false) => {
             return [board.evaluate(role), null, [...path]];
         }
         const hash = board.hash();
-        const prev = cache.get(hash);
+        const prev = minmaxCache.get(hash);
         if (prev && prev.role === role) {
             if ((Math.abs(prev.value) >= FIVE || prev.depth >= depth - cDepth) && prev.onlyThree === onlyThree && prev.onlyFour === onlyFour) // 不能连五的，则minmax 和 vct vcf 的缓存不能通用
             {
@@ -80,7 +79,7 @@ const factory = (onlyThree = false, onlyFour = false) => {
         // 缓存
         if ((cDepth < onlyThreeThreshold || onlyThree || onlyFour) && (!prev || prev.depth < depth - cDepth)) {
             cache_hits.total += 1;
-            cache.put(hash, {
+            minmaxCache.put(hash, {
                 depth: depth - cDepth, // 剩余搜索深度
                 value,
                 move,
